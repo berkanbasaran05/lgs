@@ -5,6 +5,7 @@ import axios from 'axios';
 import ErrorMsg from './error-msg';
 import * as Yup from 'yup';
 import Header from '../Typography/Header';
+import Link from 'next/link';
 
 interface FormValues {
   parentName: string;
@@ -102,7 +103,7 @@ sciencePointWrongAnswer: 0
 },
 onSubmit: async (values, { resetForm }) => {
 try {
-await axios.post('http://localhost:8080/lgs-sonuc', values);
+await axios.post('https://cihangir.onrender.com/lgs-sonuc', values);
 toast.success('Sınav Cevaplarınız Başarıyla İletildi.Size Tarafımızdan Dönüş Sağlanacaktır.', {
 position: 'top-left'
 });
@@ -575,13 +576,21 @@ validationSchema: lgsSchema
               </div>
               <div className="flex flex-row space-x-4 items-center justify-between text-xs p-4 w-full shadow-md rounded-2xl">
                 <div className="w-[200px] md:w-[300px]">
-                  <span className="text-[8px] md:text-[12px] font-normal ">
-                    Kişisel verilere ilişkin beyan ve rıza onay formunu okudum,
-                    onaylıyorum.
-                  </span>{" "}
+                  <Link href={'/'} className='text-[8px] font-thin'>  Kişisel verilere ilişkin beyan ve rıza onay formunu okudum,
+                    onaylıyorum.</Link>
                 </div>
                 <div className="flex flex-row space-x-4">
-                  
+                <input
+                        className="bg-transparent  text-center  px-1 py-4 p-4 disabled:opacity-80 w-full peer placeholder-transparent font-normal border text-brand-black-primary rounded-xl focus:ring-brand-palette-primary focus:ring-1 focus:outline-none focus:border-brand-palette-primary"
+                        value={values.studentName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        name="studentName"
+                        type="checkbox"
+                        placeholder="Veli Adı"
+                        required
+                      />
+                
                 </div>
               </div>
 

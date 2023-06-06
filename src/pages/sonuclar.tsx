@@ -129,7 +129,7 @@ const sonuclar = () => {
       setError(false);
       setLoading(true);
       try {
-        const { data } = await axios.get(`http://localhost:8080/lgs-sonuc`);
+        const { data } = await axios.get(`https://cihangir.onrender.com/lgs-sonuc`);
         setHalls(data);
         setNotFilteredHalls(data);
       } catch (error) {
