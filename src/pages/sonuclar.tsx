@@ -158,7 +158,7 @@ const sonuclar = () => {
           isError={error}
           isLoading={loading}
           fallback={<TableFallback />}
-          emptyMessage="Salon bulunamadı"
+          emptyMessage="Kayıt bulunamadı"
           data={halls}>
           {(rendered) => (
             <DataTable dataSet={10} columns={columns} rows={rendered} />
