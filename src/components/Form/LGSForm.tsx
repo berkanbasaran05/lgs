@@ -585,7 +585,7 @@ validationSchema: lgsSchema
                         value={values.studentName}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        name="studentName"
+                        name="checkbox"
                         type="checkbox"
                         placeholder="Veli Adı"
                         required
