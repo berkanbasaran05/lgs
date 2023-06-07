@@ -17,7 +17,7 @@ const tebrikler = (props: Props) => {
       ></Image>
       
       <div className="w-full md:w-3/4 relative  justify-center items-center backdrop-blur-md  mt-24   p-3 md:p-14  rounded-2xl shadow-2xl ">
-        Teşekkürler
+        Teşekkürler sevgili öğrencimiz.
       </div>
 
       <footer className="mt-4 text-xs text-gray-500">
