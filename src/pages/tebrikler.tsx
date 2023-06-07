@@ -16,8 +16,17 @@ const tebrikler = (props: Props) => {
         alt="logo"
       ></Image>
       
-      <div className="w-full md:w-3/4 relative  justify-center items-center backdrop-blur-md  mt-24   p-3 md:p-14  rounded-2xl shadow-2xl ">
-        Teşekkürler sevgili öğrencimiz.
+      <div className="w-full md:w-3/4 relative  justify-center items-center backdrop-blur-md  mt-24  space-y-10   p-14 md:p-14  rounded-2xl shadow-2xl ">
+        <div className='items-center justify-center'>
+        <Header variant="h5" >
+        Teşekkür ederiz
+        </Header>
+        </div>
+        <div className='items-center justify-center'>
+        <Header variant="h5" >
+       Kaydınız alınmıştır. Tarafınıza en kısa sürede dönüş yapılacaktır 
+        </Header>
+        </div>
       </div>
 
       <footer className="mt-4 text-xs text-gray-500">

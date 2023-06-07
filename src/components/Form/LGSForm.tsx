@@ -6,6 +6,7 @@ import ErrorMsg from './error-msg';
 import * as Yup from 'yup';
 import Header from '../Typography/Header';
 import Link from 'next/link';
+import { Router, useRouter } from 'next/router';
 
 interface FormValues {
   parentName: string;
@@ -75,6 +76,8 @@ const LGSForm = () => {
       window.location.reload();
     }, 4000); // 4 san
   };
+  const router = useRouter();
+
   const opendiv = () => {
    setopen(!open)
   }
@@ -114,7 +117,9 @@ toast.success('Sınav Cevaplarınız Başarıyla İletildi.Size Tarafımızdan D
 position: 'top-right'
 });
 resetForm();
-handlePageRefresh();
+setTimeout(() => {
+  router.push('/tebrikler')
+}, 3000); 
 } catch (error) {
 toast.error('Mesaj gönderilirken bir hata oluştu.');
 console.log(error);
