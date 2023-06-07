@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import ErrorMsg from './error-msg';
@@ -33,13 +33,18 @@ const lgsSchema = Yup.object().shape({
   parentEmail: Yup.string().email('Geçerli bir e-posta adresi giriniz.').required('Veli e-posta adresini giriniz.'),
   studentName: Yup.string().required('Öğrenci adını giriniz.'),
   campus: Yup.string().required('Kampüs adını giriniz.'),
-  turkishCorrectAnswer: Yup.number().required('Türkçe doğru cevabını giriniz.'),
+  turkishCorrectAnswer: Yup.number()
+    .max(20, 'Türkçe doğru cevap sayısı 20\'yi geçemez.')
+    .required('Türkçe doğru cevabını giriniz.'),
+  turkishWrongAnswer: Yup.number()
+    .max(20, 'Türkçe yanlış cevap sayısı 20\'yi geçemez.')
+    .required('Türkçe yanlış cevabını giriniz.'),
+
   historyCorrectAnswer: Yup.number().required('Tarih doğru cevabını giriniz.'),
   religionCorrectAnswer: Yup.number().required('Din kültürü doğru cevabını giriniz.'),
   foreignLanguageCorrectAnswer: Yup.number().required('Yabancı dil doğru cevabını giriniz.'),
   mathPointCorrectAnswer: Yup.number().required('Matematik doğru cevabını giriniz.'),
   sciencePointCorrectAnswer: Yup.number().required('Fen bilimleri doğru cevabını giriniz.'),
-  turkishWrongAnswer: Yup.number().required('Türkçe yanlış cevabını giriniz.'),
   historyWrongAnswer: Yup.number().required('Tarih yanlış cevabını giriniz.'),
   religionWrongAnswer: Yup.number().required('Din kültürü yanlış cevabını giriniz.'),
   foreignLanguageWrongAnswer: Yup.number().required('Yabancı dil yanlış cevabını giriniz.'),
@@ -74,9 +79,9 @@ const LGSForm = () => {
    setopen(!open)
   }
   const {
-    handleChange,
     handleSubmit,
     handleBlur,
+    setFieldValue,
     errors,
     values,
     touched
@@ -87,25 +92,26 @@ const LGSForm = () => {
       parentEmail: '',
       studentName: '',
       campus: '',
-      turkishCorrectAnswer: 0,
-      historyCorrectAnswer: 0,
-      religionCorrectAnswer: 0,
-      foreignLanguageCorrectAnswer: 0,
-      mathPointCorrectAnswer: 0,
-      sciencePointCorrectAnswer: 0,
+      turkishCorrectAnswer: NaN,
+      historyCorrectAnswer: NaN,
+      religionCorrectAnswer: NaN,
+      foreignLanguageCorrectAnswer: NaN,
+      mathPointCorrectAnswer: NaN,
+      sciencePointCorrectAnswer: NaN,
 
-turkishWrongAnswer: 0,
-historyWrongAnswer: 0,
-religionWrongAnswer: 0,
-foreignLanguageWrongAnswer: 0,
-mathPointWrongAnswer: 0,
-sciencePointWrongAnswer: 0
+turkishWrongAnswer: NaN,
+historyWrongAnswer: NaN,
+religionWrongAnswer: NaN,
+foreignLanguageWrongAnswer: NaN,
+mathPointWrongAnswer: NaN,
+sciencePointWrongAnswer: NaN
 },
 onSubmit: async (values, { resetForm }) => {
+  
 try {
 await axios.post('https://cihangir.onrender.com/lgs-sonuc', values);
 toast.success('Sınav Cevaplarınız Başarıyla İletildi.Size Tarafımızdan Dönüş Sağlanacaktır.', {
-position: 'top-left'
+position: 'top-right'
 });
 resetForm();
 handlePageRefresh();
@@ -114,14 +120,130 @@ toast.error('Mesaj gönderilirken bir hata oluştu.');
 console.log(error);
 }
 },
+
+
+
 validationSchema: lgsSchema
 });
+const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+  const { name, value } = event.target;
+
+  if (
+    name === 'turkishCorrectAnswer' ||
+    name === 'turkishWrongAnswer' ||
+    name === 'religionCorrectAnswer' ||
+    name === 'religionWrongAnswer' ||
+    name === 'historyCorrectAnswer' ||
+    name === 'historyWrongAnswer'||
+    name === 'foreignLanguageCorrectAnswer' ||
+    name === 'foreignLanguageWrongAnswer'||
+    name === 'sciencePointCorrectAnswer' ||
+    name === 'sciencePointWrongAnswer'||
+    name === 'mathPointCorrectAnswer' ||
+    name === 'mathPointWrongAnswer'
+  ) {
+    const maxTurkishQuestionCount = 20;
+    const maxHistoryQuestionCount = 10;
+    const maxsciencePointQuestionCount = 20;
+    const maxmathPointQuestionCount = 20;
+    const maxreligionQuestionCount = 10;
+    const maxforeignLanguageQuestionCount = 10;
+
+    if (/^\d+$/.test(value)) { // Sadece sayıya izin veren kontrol
+      const parsedValue = parseInt(value, 10);
+      if (!isNaN(parsedValue)) {
+        if (name === 'turkishCorrectAnswer' || name === 'turkishWrongAnswer') {
+          const turkishCorrectAnswer = parseInt(String(values.turkishCorrectAnswer), 10) || 0;
+          const turkishWrongAnswer = parseInt(String(values.turkishWrongAnswer), 10) || 0;
+          const turkishTotal = turkishCorrectAnswer + turkishWrongAnswer + parsedValue;
+
+          if (turkishTotal <= maxTurkishQuestionCount || parsedValue === maxTurkishQuestionCount) {
+            setFieldValue(name as keyof FormValues, parsedValue.toString()); // Değeri string olarak ayarla
+          } else {
+            setFieldValue(name as keyof FormValues, ''); // Geçersiz değer olduğunda sıfırla
+          }
+        } else if (name === 'historyCorrectAnswer' || name === 'historyWrongAnswer') {
+          const historyCorrectAnswer = parseInt(String(values.historyCorrectAnswer), 10) || 0;
+          const historyWrongAnswer = parseInt(String(values.historyWrongAnswer), 10) || 0;
+          const historyTotal = historyCorrectAnswer + historyWrongAnswer + parsedValue;
+
+          if (historyTotal <= maxHistoryQuestionCount || parsedValue === maxHistoryQuestionCount) {
+            setFieldValue(name as keyof FormValues, parsedValue.toString()); // Değeri string olarak ayarla
+          } else {
+            setFieldValue(name as keyof FormValues, ''); // Geçersiz değer olduğunda sıfırla
+          }
+        } else if (name === 'sciencePointCorrectAnswer' || name === 'sciencePointWrongAnswer') {
+          const sciencePointCorrectAnswer = parseInt(String(values.sciencePointCorrectAnswer), 10) || 0;
+          const sciencePointWrongAnswer = parseInt(String(values.sciencePointWrongAnswer), 10) || 0;
+          const sciencePointTotal = sciencePointCorrectAnswer + sciencePointWrongAnswer + parsedValue;
+
+          if (sciencePointTotal <= maxsciencePointQuestionCount || parsedValue === maxsciencePointQuestionCount) {
+            setFieldValue(name as keyof FormValues, parsedValue.toString()); // Değeri string olarak ayarla
+          } else {
+            setFieldValue(name as keyof FormValues, ''); // Geçersiz değer olduğunda sıfırla
+          }
+        }
+        else if (name === 'mathPointCorrectAnswer' || name === 'mathPointWrongAnswer') {
+          const mathPointCorrectAnswer = parseInt(String(values.mathPointCorrectAnswer), 10) || 0;
+          const mathPointWrongAnswer = parseInt(String(values.mathPointWrongAnswer), 10) || 0;
+          const mathPointTotal = mathPointCorrectAnswer + mathPointWrongAnswer + parsedValue;
+
+          if (mathPointTotal <= maxmathPointQuestionCount || parsedValue === maxmathPointQuestionCount) {
+            setFieldValue(name as keyof FormValues, parsedValue.toString()); // Değeri string olarak ayarla
+          } else {
+            setFieldValue(name as keyof FormValues, ''); // Geçersiz değer olduğunda sıfırla
+          }
+        }
+        else if (name === 'religionCorrectAnswer' || name === 'religionWrongAnswer') {
+          const religionCorrectAnswer = parseInt(String(values.religionCorrectAnswer), 10) || 0;
+          const religionWrongAnswer = parseInt(String(values.religionWrongAnswer), 10) || 0;
+          const religionTotal = religionCorrectAnswer + religionWrongAnswer + parsedValue;
+
+          if (religionTotal <= maxreligionQuestionCount || parsedValue === maxreligionQuestionCount) {
+            setFieldValue(name as keyof FormValues, parsedValue.toString()); // Değeri string olarak ayarla
+          } else {
+            setFieldValue(name as keyof FormValues, ''); // Geçersiz değer olduğunda sıfırla
+          }
+        } else if (name === 'foreignLanguageCorrectAnswer' || name === 'foreignLanguageWrongAnswer') {
+          const foreignLanguageCorrectAnswer = parseInt(String(values.foreignLanguageCorrectAnswer), 10) || 0;
+          const foreignLanguageWrongAnswer = parseInt(String(values.foreignLanguageWrongAnswer), 10) || 0;
+          const foreignLanguageTotal = foreignLanguageCorrectAnswer + foreignLanguageWrongAnswer + parsedValue;
+
+          if (foreignLanguageTotal <= maxforeignLanguageQuestionCount || parsedValue === maxforeignLanguageQuestionCount) {
+            setFieldValue(name as keyof FormValues, parsedValue.toString()); // Değeri string olarak ayarla
+          } else {
+            setFieldValue(name as keyof FormValues, ''); // Geçersiz değer olduğunda sıfırla
+          }
+        }
+        
+      } else {
+        setFieldValue(name as keyof FormValues, ''); // Geçersiz değer olduğunda sıfırla
+      }
+    } else {
+      setFieldValue(name as keyof FormValues, ''); // Harf girildiğinde sıfırla
+    }
+  } else {
+    setFieldValue(name as keyof FormValues, value); // Diğer alanlara doğrudan değeri ayarla
+  }
+};
+
+
+const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number => {
+  const netCorrect = Math.max(0, (correctAnswer - wrongAnswer / 3));
+  return isNaN(netCorrect) ? 0 : netCorrect;
+};
+
+
+
+
+
+
         
         return (
         <form className="flex flex-col  items-center space-y-4 mt-4 w-full" onSubmit={handleSubmit}>
 
 
-<Header variant="h5"> SÖZEL BÖLÜM - TOPLAM 50 SORU</Header>
+          <Header variant="h5"> SÖZEL BÖLÜM - TOPLAM 50 SORU</Header>
       
         <div className='flex flex-row space-x-4 items-center justify-between  text-xs p-4 w-full shadow-md rounded-2xl'>
         <div className="w-[200px] md:w-[300px]">
@@ -136,8 +258,11 @@ validationSchema: lgsSchema
                className="bg-transparent  text-center  px-1 py-2 p-4 disabled:opacity-80 w-full peer placeholder-transparent font-normal border text-brand-black-primary rounded-xl focus:ring-brand-palette-primary focus:ring-1 focus:outline-none focus:border-brand-palette-primary"
                value={values.turkishCorrectAnswer}
                onChange={handleChange}
+              
+              
                onBlur={handleBlur}
                name="turkishCorrectAnswer"
+               min='0'
                type="number"
                placeholder="Türkçe Doğru Cevap"
                required
@@ -152,6 +277,7 @@ validationSchema: lgsSchema
               onBlur={handleBlur}
               name="turkishWrongAnswer"
               type="number"
+           
               placeholder="Türkçe Yanlış Cevap"
               required
             />
@@ -163,7 +289,10 @@ validationSchema: lgsSchema
               className="text-[10px] md:text-[12px]"
               style={{ whiteSpace: "nowrap" }}
             >
-             Net Doğru: {Math.max(0, values.turkishCorrectAnswer - values.turkishWrongAnswer / 3).toFixed(2)}
+             Net Doğru: {isNaN(values.turkishCorrectAnswer) || isNaN(values.turkishWrongAnswer)
+            ? 0
+            : Math.max(0, (values.turkishCorrectAnswer - values.turkishWrongAnswer / 3)).toFixed(2)}
+
               
             </span>
 
@@ -211,59 +340,61 @@ validationSchema: lgsSchema
               className="text-[10px] md:text-[12px] font-normal"
               style={{ whiteSpace: "nowrap" }}
             >
-              Net Doğru: {Math.max(0, values.historyCorrectAnswer - values.historyWrongAnswer / 3).toFixed(2)}
+              Net Doğru: {isNaN(values.historyCorrectAnswer) || isNaN(values.historyWrongAnswer)
+            ? 0
+            : Math.max(0, (values.historyCorrectAnswer - values.historyWrongAnswer / 3)).toFixed(2)}
+
               
             </span>
 
         
         </div>
         
-        <div className='flex flex-row space-x-4 items-center justify-between  text-xs p-4 w-full shadow-md rounded-2xl'>
-        <div className="w-[200px] md:w-[300px]">
-              <span className="text-[8px] md:text-[12px]  font-normal">
-              Din Kültürü ve Ahlak Bilgisi (10 Soru)
-              </span>{" "}
-            </div>
-            <div className="flex flex-row space-x-4 w-[300px]">
-            <div className='flex flex-col'>
-              <span>Doğru</span>
-            <input
-               className="bg-transparent  text-center  px-1 py-2 p-4 disabled:opacity-80 w-full peer placeholder-transparent font-normal border text-brand-black-primary rounded-xl focus:ring-brand-palette-primary focus:ring-1 focus:outline-none focus:border-brand-palette-primary"
-               value={values.religionCorrectAnswer}
-               onChange={handleChange}
-               onBlur={handleBlur}
-               name="religionCorrectAnswer"
-               type="number"
-               placeholder=""
-               required
-             />
-            </div>
-            <div className='flex flex-col'>
-              <span>Yanlış</span>
-              <input
-             className="bg-transparent  text-center  px-1 py-2 p-4 disabled:opacity-80 w-full peer placeholder-transparent font-normal border text-brand-black-primary rounded-xl focus:ring-brand-palette-primary focus:ring-1 focus:outline-none focus:border-brand-palette-primary"
-              value={values.religionWrongAnswer}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              name="religionWrongAnswer"
-              type="number"
-              placeholder=""
-              required
-            />
-            </div>
-                
+        <div className='flex flex-row space-x-4 items-center justify-between text-xs p-4 w-full shadow-md rounded-2xl'>
+  <div className="w-[200px] md:w-[300px]">
+    <span className="text-[8px] md:text-[12px]  font-normal">
+      Din Kültürü ve Ahlak Bilgisi (10 Soru)
+    </span>{" "}
+  </div>
+  <div className="flex flex-row space-x-4 w-[300px]">
+    <div className='flex flex-col'>
+      <span>Doğru</span>
+      <input
+        className="bg-transparent  text-center px-1 py-2 p-4 disabled:opacity-80 w-full peer placeholder-transparent font-normal border text-brand-black-primary rounded-xl focus:ring-brand-palette-primary focus:ring-1 focus:outline-none focus:border-brand-palette-primary"
+        value={values.religionCorrectAnswer}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        name="religionCorrectAnswer"
+        type="number"
+        placeholder=""
+        required
+      />
+    </div>
+    <div className='flex flex-col'>
+      <span>Yanlış</span>
+      <input
+        className="bg-transparent text-center px-1 py-2 p-4 disabled:opacity-80 w-full peer placeholder-transparent font-normal border text-brand-black-primary rounded-xl focus:ring-brand-palette-primary focus:ring-1 focus:outline-none focus:border-brand-palette-primary"
+        value={values.religionWrongAnswer}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        name="religionWrongAnswer"
+        type="number"
+        placeholder=""
+        // Adım değeri 1 olarak ayarlandı
+        required
+      />
+    </div>
+  </div>
+  <span
+    className="text-[10px] md:text-[12px]"
+    style={{ whiteSpace: "nowrap" }}
+  >
+    Net Doğru: {isNaN(values.religionCorrectAnswer) || isNaN(values.religionWrongAnswer)
+  ? 0
+  : Math.max(0, (values.religionCorrectAnswer - values.religionWrongAnswer / 3)).toFixed(2)}
 
-            </div>
-            <span
-              className="text-[10px] md:text-[12px]"
-              style={{ whiteSpace: "nowrap" }}
-            >
-              Net Doğru: {Math.max(0, values.religionCorrectAnswer - values.religionWrongAnswer / 3).toFixed(2)}
-              
-            </span>
-
-        
-        </div>
+  </span>
+</div>
 
 
         <div className='flex flex-row space-x-4 items-center justify-between  text-xs p-4 w-full shadow-md rounded-2xl'>
@@ -306,7 +437,7 @@ validationSchema: lgsSchema
               className="text-[10px] md:text-[12px]"
               style={{ whiteSpace: "nowrap" }}
             >
-               Net Doğru: {Math.max(0, values.foreignLanguageCorrectAnswer - values.foreignLanguageWrongAnswer / 3).toFixed(2)}
+              Net Doğru: {isNaN(values.foreignLanguageCorrectAnswer) || isNaN(values.foreignLanguageWrongAnswer)? 0 : Math.max(0, values.foreignLanguageCorrectAnswer - values.foreignLanguageWrongAnswer / 3).toFixed(2)}
 
               
             </span>
@@ -376,7 +507,10 @@ validationSchema: lgsSchema
               className="text-[10px] md:text-[12px]"
               style={{ whiteSpace: "nowrap" }}
             >
-               Net Doğru: {Math.max(0, values.mathPointCorrectAnswer - values.mathPointWrongAnswer / 3).toFixed(2)}
+               Net Doğru: {isNaN(values.mathPointCorrectAnswer) || isNaN(values.mathPointWrongAnswer)
+              ? 0
+              : Math.max(0, (values.mathPointCorrectAnswer - values.mathPointWrongAnswer / 3)).toFixed(2)}
+
              
             </span>
           </div>
@@ -426,8 +560,10 @@ validationSchema: lgsSchema
               className="text-[10px] md:text-[12px]"
               style={{ whiteSpace: "nowrap" }}
             >
-              Net Doğru: {Math.max(0, values.sciencePointCorrectAnswer - values.sciencePointWrongAnswer / 3).toFixed(2)}
-              
+              Net Doğru: {isNaN(values.sciencePointCorrectAnswer) || isNaN(values.sciencePointWrongAnswer)
+              ? 0
+              : Math.max(0, (values.sciencePointCorrectAnswer - values.sciencePointWrongAnswer / 3)).toFixed(2)}
+
             </span>
           </div>
 
@@ -450,7 +586,24 @@ validationSchema: lgsSchema
            <button
               type='button'
               className="p-4  bg-brand-palette-primary text-white items-center justify-center text-center text-sm rounded-xl px-4 py-4  mt-12 mb-12 w-3/4 shadow-md  hover:text-white"
-              onClick={opendiv}
+              onClick={() => {
+                if (
+                  values.turkishCorrectAnswer  &&
+                  values.historyCorrectAnswer  &&
+                  values.religionCorrectAnswer &&
+                  values.foreignLanguageCorrectAnswer &&
+                  values.mathPointCorrectAnswer  &&
+                  values.sciencePointCorrectAnswer  &&
+                  values.turkishWrongAnswer  &&
+                  values.historyWrongAnswer &&
+                  values.religionWrongAnswer  &&
+                  values.foreignLanguageWrongAnswer &&
+                  values.mathPointWrongAnswer &&
+                  values.sciencePointWrongAnswer
+                ) {
+                  opendiv();
+                }
+              }}
               
               
             >
@@ -502,7 +655,8 @@ validationSchema: lgsSchema
                         onBlur={handleBlur}
                         name="parentPhone"
                         type="phone"
-                        placeholder="Veli Adı"
+                        pattern="[0-9]*"
+                        placeholder=""
                         required
                       />
                        {touched.parentPhone && <ErrorMsg error={errors.parentPhone} />}
@@ -602,7 +756,7 @@ validationSchema: lgsSchema
       )}
 
    <div className='flex flex-col mt-8 items-start text-sm space-y-1'>
-   <span>• 2023 MEB LGS sınav istatistikleri (net ortalamaları ve standart sapma değerleri) kullanılarak puan hesaplaması yapılmaktadır. Dolayısıyla tüm puan hesaplama uygulamaları tahmini olacaktır.</span>
+   <span>• 2022 MEB LGS sınav istatistikleri (net ortalamaları ve standart sapma değerleri) kullanılarak puan hesaplaması yapılmaktadır. Dolayısıyla tüm puan hesaplama uygulamaları tahmini olacaktır.</span>
 <span>• Sistemi kullanarak alacağınız puan tahmini puandır, kanuni bağlayıcılığı yoktur.</span>
 <span>• Sınavın kolay olması durumunda puanlar düşer, zor olması durumunda puanlar yükselir.</span>
 <span>• Yerleştirme sisteminde önemli olan aldığınız puan değil, tüm sınava girenler içindeki sıralamanızdır.</span>

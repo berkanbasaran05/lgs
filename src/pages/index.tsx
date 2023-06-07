@@ -31,7 +31,7 @@ export default function Home() {
       </Header>
       <Header variant="h5" className="items-center mt-4 text-brand-red-primary">
         {" "}
-        Cihangir Kolejleri   LGS'de başarılı olan öğrencilere %100'e varan burs
+        Cihangir Okulları   LGS'de başarılı olan öğrencilere %100'e varan burs
         imkanı sağlayarak başarıyı ödüllendiriyor.
       </Header>
 
