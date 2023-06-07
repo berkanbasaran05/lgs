@@ -44,13 +44,13 @@ const lgsSchema = Yup.object().shape({
   historyCorrectAnswer: Yup.number().required('Tarih doğru cevabını giriniz.'),
   religionCorrectAnswer: Yup.number().required('Din kültürü doğru cevabını giriniz.'),
   foreignLanguageCorrectAnswer: Yup.number().required('Yabancı dil doğru cevabını giriniz.'),
-  mathPointCorrectAnswer: Yup.number().required('Matematik doğru cevabını giriniz.'),
-  sciencePointCorrectAnswer: Yup.number().required('Fen bilimleri doğru cevabını giriniz.'),
+  mathPointCorrectAnswer: Yup.number().required('Matematik doğru cevabını giriniz.').typeError(''),
+  sciencePointCorrectAnswer: Yup.number().required('Fen bilimleri doğru cevabını giriniz.').typeError(''),
   historyWrongAnswer: Yup.number().required('Tarih yanlış cevabını giriniz.'),
   religionWrongAnswer: Yup.number().required('Din kültürü yanlış cevabını giriniz.'),
   foreignLanguageWrongAnswer: Yup.number().required('Yabancı dil yanlış cevabını giriniz.'),
-  mathPointWrongAnswer: Yup.number().required('Matematik yanlış cevabını giriniz.'),
-  sciencePointWrongAnswer: Yup.number().required('Fen bilimleri yanlış cevabını giriniz.')
+  mathPointWrongAnswer: Yup.number().required('Matematik yanlış cevabını giriniz.').typeError(''),
+  sciencePointWrongAnswer: Yup.number().required('Fen bilimleri yanlış cevabını giriniz.').typeError('')
 });
 
 const LGSForm = () => {
@@ -269,6 +269,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
                name="turkishCorrectAnswer"
                min='0'
                type="number"
+               pattern="[0-9]*"
                placeholder="Türkçe Doğru Cevap"
                required
              />
@@ -282,7 +283,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
               onBlur={handleBlur}
               name="turkishWrongAnswer"
               type="number"
-           
+              pattern="[0-9]*"
               placeholder="Türkçe Yanlış Cevap"
               required
             />
@@ -321,6 +322,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
                name="historyCorrectAnswer"
                type="number"
                placeholder=""
+               pattern="[0-9]*"
                required
              />
 
@@ -334,6 +336,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
               onBlur={handleBlur}
               name="historyWrongAnswer"
               type="number"
+              pattern="[0-9]*"
               placeholder=""
               required
             />
@@ -371,6 +374,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
         onBlur={handleBlur}
         name="religionCorrectAnswer"
         type="number"
+        
         placeholder=""
         required
       />
@@ -384,6 +388,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
         onBlur={handleBlur}
         name="religionWrongAnswer"
         type="number"
+        pattern="[0-9]*"
         placeholder=""
         // Adım değeri 1 olarak ayarlandı
         required
@@ -418,6 +423,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
                onBlur={handleBlur}
                name="foreignLanguageCorrectAnswer"
                type="number"
+               pattern="[0-9]*"
                placeholder=""
                required
              />
@@ -431,6 +437,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
               onBlur={handleBlur}
               name="foreignLanguageWrongAnswer"
               type="number"
+              pattern="[0-9]*"
               placeholder=""
               required
             />
@@ -486,6 +493,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
             onBlur={handleBlur}
             name="mathPointCorrectAnswer"
             type="number"
+            pattern="[0-9]*"
             placeholder="Türkçe Doğru Cevap"
             required
             className="bg-transparent  text-center  px-1 py-2 p-4 disabled:opacity-80 w-full peer placeholder-transparent font-normal border text-brand-black-primary rounded-xl focus:ring-brand-palette-primary focus:ring-1 focus:outline-none focus:border-brand-palette-primary"
@@ -501,6 +509,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
             onBlur={handleBlur}
             name="mathPointWrongAnswer"
             type="number"
+            pattern="[0-9]*"
             placeholder="Türkçe Doğru Cevap"
             required
             className="bg-transparent  text-center  px-1 py-2 p-4 disabled:opacity-80 w-full peer placeholder-transparent font-normal border text-brand-black-primary rounded-xl focus:ring-brand-palette-primary focus:ring-1 focus:outline-none focus:border-brand-palette-primary"
@@ -536,6 +545,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
             onBlur={handleBlur}
             name="sciencePointCorrectAnswer"
             type="number"
+            pattern="[0-9]*"
             placeholder="Türkçe Doğru Cevap"
             required
             className="bg-transparent  text-center  px-1 py-2 p-4 disabled:opacity-80 w-full peer placeholder-transparent font-normal border text-brand-black-primary rounded-xl focus:ring-brand-palette-primary focus:ring-1 focus:outline-none focus:border-brand-palette-primary"
@@ -551,6 +561,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
             onBlur={handleBlur}
             name="sciencePointWrongAnswer"
             type="number"
+            pattern="[0-9]*"
             placeholder="Türkçe Doğru Cevap"
             required
             className="bg-transparent  text-center  px-1 py-2 p-4 disabled:opacity-80 w-full peer placeholder-transparent font-normal border text-brand-black-primary rounded-xl focus:ring-brand-palette-primary focus:ring-1 focus:outline-none focus:border-brand-palette-primary"
