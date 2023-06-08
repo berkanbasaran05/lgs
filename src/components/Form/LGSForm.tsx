@@ -156,10 +156,10 @@ const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>):
     name === 'mathPointCorrectAnswer' ||
     name === 'mathPointWrongAnswer'
   ) {
-    const maxTurkishQuestionCount = 20;
+    const maxTurkishQuestionCount = 21;
     const maxHistoryQuestionCount = 10;
-    const maxsciencePointQuestionCount = 20;
-    const maxmathPointQuestionCount = 20;
+    const maxsciencePointQuestionCount = 21;
+    const maxmathPointQuestionCount = 21;
     const maxreligionQuestionCount = 10;
     const maxforeignLanguageQuestionCount = 10;
 
@@ -171,7 +171,7 @@ const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>):
           const turkishWrongAnswer = parseInt(String(values.turkishWrongAnswer), 10) || 0;
           const turkishTotal = turkishCorrectAnswer + turkishWrongAnswer + parsedValue;
 
-          if (turkishTotal <= maxTurkishQuestionCount || parsedValue === maxTurkishQuestionCount) {
+          if (turkishTotal <= maxTurkishQuestionCount || parsedValue === maxTurkishQuestionCount -1) {
             setFieldValue(name as keyof FormValues, parsedValue.toString()); // Değeri string olarak ayarla
           } else {
             setFieldValue(name as keyof FormValues, 0); // Geçersiz değer olduğunda sıfırla
@@ -189,9 +189,9 @@ const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>):
         } else if (name === 'sciencePointCorrectAnswer' || name === 'sciencePointWrongAnswer') {
           const sciencePointCorrectAnswer = parseInt(String(values.sciencePointCorrectAnswer), 10) || 0;
           const sciencePointWrongAnswer = parseInt(String(values.sciencePointWrongAnswer), 10) || 0;
-          const sciencePointTotal = sciencePointCorrectAnswer + sciencePointWrongAnswer + parsedValue;
+          const sciencePointTotal = sciencePointCorrectAnswer + sciencePointWrongAnswer + parsedValue ;
 
-          if (sciencePointTotal <= maxsciencePointQuestionCount || parsedValue === maxsciencePointQuestionCount) {
+          if (sciencePointTotal <= maxsciencePointQuestionCount || parsedValue === maxsciencePointQuestionCount - 1) {
             setFieldValue(name as keyof FormValues, parsedValue.toString()); // Değeri string olarak ayarla
           } else {
             setFieldValue(name as keyof FormValues, ''); // Geçersiz değer olduğunda sıfırla
@@ -202,7 +202,7 @@ const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>):
           const mathPointWrongAnswer = parseInt(String(values.mathPointWrongAnswer), 10) || 0;
           const mathPointTotal = mathPointCorrectAnswer + mathPointWrongAnswer + parsedValue;
 
-          if (mathPointTotal <= maxmathPointQuestionCount || parsedValue === maxmathPointQuestionCount) {
+          if (mathPointTotal <= maxmathPointQuestionCount  || parsedValue === maxmathPointQuestionCount -1) {
             setFieldValue(name as keyof FormValues, parsedValue.toString()); // Değeri string olarak ayarla
           } else {
             setFieldValue(name as keyof FormValues, ''); // Geçersiz değer olduğunda sıfırla
@@ -223,7 +223,7 @@ const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>):
           const foreignLanguageWrongAnswer = parseInt(String(values.foreignLanguageWrongAnswer), 10) || 0;
           const foreignLanguageTotal = foreignLanguageCorrectAnswer + foreignLanguageWrongAnswer + parsedValue;
 
-          if (foreignLanguageTotal <= maxforeignLanguageQuestionCount || parsedValue === maxforeignLanguageQuestionCount) {
+          if (foreignLanguageTotal <= maxforeignLanguageQuestionCount || parsedValue === maxforeignLanguageQuestionCount  ) {
             setFieldValue(name as keyof FormValues, parsedValue.toString()); // Değeri string olarak ayarla
           } else {
             setFieldValue(name as keyof FormValues, ''); // Geçersiz değer olduğunda sıfırla
@@ -276,7 +276,6 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
               
                onBlur={handleBlur}
                name="turkishCorrectAnswer"
-               min='0'
                type="number"
                pattern="[0-9]*"
                placeholder="Türkçe Doğru Cevap"
@@ -306,7 +305,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
             >
              Net Doğru: {isNaN(values.turkishCorrectAnswer) || isNaN(values.turkishWrongAnswer)
             ? 0
-            : Math.max(0, (values.turkishCorrectAnswer - values.turkishWrongAnswer / 3)).toFixed(2)}
+            : Math.max(-10, (values.turkishCorrectAnswer - values.turkishWrongAnswer / 3)).toFixed(2)}
 
               
             </span>
@@ -360,7 +359,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
             >
               Net Doğru: {isNaN(values.historyCorrectAnswer) || isNaN(values.historyWrongAnswer)
             ? 0
-            : Math.max(0, (values.historyCorrectAnswer - values.historyWrongAnswer / 3)).toFixed(2)}
+            : Math.max(-10, (values.historyCorrectAnswer - values.historyWrongAnswer / 3)).toFixed(2)}
 
               
             </span>
@@ -411,7 +410,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
   >
     Net Doğru: {isNaN(values.religionCorrectAnswer) || isNaN(values.religionWrongAnswer)
   ? 0
-  : Math.max(0, (values.religionCorrectAnswer - values.religionWrongAnswer / 3)).toFixed(2)}
+  : Math.max(-10, (values.religionCorrectAnswer - values.religionWrongAnswer / 3)).toFixed(2)}
 
   </span>
 </div>
@@ -459,7 +458,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
               className="text-[10px] md:text-[12px]"
               style={{ whiteSpace: "nowrap" }}
             >
-              Net Doğru: {isNaN(values.foreignLanguageCorrectAnswer) || isNaN(values.foreignLanguageWrongAnswer)? 0 : Math.max(0, values.foreignLanguageCorrectAnswer - values.foreignLanguageWrongAnswer / 3).toFixed(2)}
+              Net Doğru: {isNaN(values.foreignLanguageCorrectAnswer) || isNaN(values.foreignLanguageWrongAnswer)? 0 : Math.max(-10, values.foreignLanguageCorrectAnswer - values.foreignLanguageWrongAnswer / 3).toFixed(2)}
 
               
             </span>
@@ -533,7 +532,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
             >
                Net Doğru: {isNaN(values.mathPointCorrectAnswer) || isNaN(values.mathPointWrongAnswer)
               ? 0
-              : Math.max(0, (values.mathPointCorrectAnswer - values.mathPointWrongAnswer / 3)).toFixed(2)}
+              : Math.max(-10, (values.mathPointCorrectAnswer - values.mathPointWrongAnswer / 3)).toFixed(2)}
 
              
             </span>
@@ -588,7 +587,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
             >
               Net Doğru: {isNaN(values.sciencePointCorrectAnswer) || isNaN(values.sciencePointWrongAnswer)
               ? 0
-              : Math.max(0, (values.sciencePointCorrectAnswer - values.sciencePointWrongAnswer / 3)).toFixed(2)}
+              : Math.max(-10, (values.sciencePointCorrectAnswer - values.sciencePointWrongAnswer / 3)).toFixed(2)}
 
             </span>
           </div>
