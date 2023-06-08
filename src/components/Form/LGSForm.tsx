@@ -756,7 +756,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
               </div>
               <div className="flex flex-row space-x-4 items-center justify-between text-xs p-4 w-full shadow-md rounded-2xl">
                 <div className="w-[200px] md:w-[300px]">
-                  <Link href={'/'} className='text-[8px] font-thin'>  Kişisel verilere ilişkin beyan ve rıza onay formunu okudum,
+                  <Link href={'/'} className='text-[12px] font-thin'>  Kişisel verilere ilişkin beyan ve rıza onay formunu okudum,
                     onaylıyorum.</Link>
                 </div>
                 <div className="flex flex-row space-x-4">
