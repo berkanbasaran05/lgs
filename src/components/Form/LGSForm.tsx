@@ -7,6 +7,8 @@ import * as Yup from 'yup';
 import Header from '../Typography/Header';
 import Link from 'next/link';
 import { Router, useRouter } from 'next/router';
+import { FormFooter } from '../FormElements';
+import Button from '../Button';
 
 interface FormValues {
   parentName: string;
@@ -81,6 +83,8 @@ const LGSForm = () => {
   const opendiv = () => {
    setopen(!open)
   }
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const {
     handleSubmit,
     handleBlur,
@@ -112,6 +116,7 @@ sciencePointWrongAnswer: NaN
 onSubmit: async (values, { resetForm }) => {
   
 try {
+  setLoading(true); 
 await axios.post('https://cihangir.onrender.com/lgs-sonuc', values);
 toast.success('Sınav Cevaplarınız Başarıyla İletildi.Yönlendiriliyorsunuz.', {
 position: 'top-center'
@@ -123,6 +128,9 @@ setTimeout(() => {
 } catch (error) {
 toast.error('Mesaj gönderilirken bir hata oluştu.',{position:'top-center'});
 console.log(error);
+
+}finally{
+  setLoading(false);
 }
 },
 
@@ -130,6 +138,7 @@ console.log(error);
 
 validationSchema: lgsSchema
 });
+const [loading, setLoading] = useState(false);
 const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
   const { name, value } = event.target;
 
@@ -165,7 +174,7 @@ const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>):
           if (turkishTotal <= maxTurkishQuestionCount || parsedValue === maxTurkishQuestionCount) {
             setFieldValue(name as keyof FormValues, parsedValue.toString()); // Değeri string olarak ayarla
           } else {
-            setFieldValue(name as keyof FormValues, ''); // Geçersiz değer olduğunda sıfırla
+            setFieldValue(name as keyof FormValues, 0); // Geçersiz değer olduğunda sıfırla
           }
         } else if (name === 'historyCorrectAnswer' || name === 'historyWrongAnswer') {
           const historyCorrectAnswer = parseInt(String(values.historyCorrectAnswer), 10) || 0;
@@ -321,6 +330,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
                onBlur={handleBlur}
                name="historyCorrectAnswer"
                type="number"
+               max='10'
                placeholder=""
                pattern="[0-9]*"
                required
@@ -544,7 +554,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
             onChange={handleChange}
             onBlur={handleBlur}
             name="sciencePointCorrectAnswer"
-            type="number"
+            type='number'
             pattern="[0-9]*"
             placeholder="Türkçe Doğru Cevap"
             required
@@ -764,10 +774,23 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
                 </div>
               </div>
 
-        <button type="submit" className="p-4 bg-brand-palette-primary text-white rounded-2xl w-2/4">
-       
-      Gönder
-</button>
+              <Button
+              loading={loading}
+              fallback={
+                <div className="flex relative items-center">
+                  <svg className="h-4 w-4 animate-spin" viewBox="3 3 18 18">
+                    <path
+                      className="fill-current"
+                      d="M16.9497 7.05015C14.2161 4.31648 9.78392 4.31648 7.05025 7.05015C6.65973 7.44067 6.02656 7.44067 5.63604 7.05015C5.24551 6.65962 5.24551 6.02646 5.63604 5.63593C9.15076 2.12121 14.8492 2.12121 18.364 5.63593C18.7545 6.02646 18.7545 6.65962 18.364 7.05015C17.9734 7.44067 17.3403 7.44067 16.9497 7.05015Z"
+                    />
+                  </svg>
+                  <span className="ml-2 text-sm">Yükleniyor</span>
+                </div>
+              }
+              type="submit"
+              className="p-4 bg-brand-palette-primary text-white rounded-2xl w-2/4">
+              <span className="ml-1.5 mr-1">Gönder</span>
+            </Button>
         </>
       )}
 
