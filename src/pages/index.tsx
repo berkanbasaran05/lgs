@@ -20,12 +20,14 @@ export default function Home() {
     <main
       className={`flex min-h-screen flex-col items-center bg-white text-black justify-between p-6 `}
     >
+      <a href="https://www.cihangir.k12.tr/">
       <Image
         src="/assets/logo/logo-1.png"
         width={150}
         height={150}
         alt="logo"
-      ></Image>
+      />
+      </a>
       <Header variant="h1" className="mt-12 text-brand-palette-primary ">
         LGS PUANINI HEMEN HESAPLA, BURSUNU ÖĞREN!
       </Header>
@@ -39,8 +41,8 @@ export default function Home() {
         <LGSForm></LGSForm>
       </div>
 
-      <footer className="mt-4 text-xs text-gray-500">
-        ©2023. Cihangir Okulları - Tüm hakları saklıdır.
+      <footer className="mt-4 text-xs text-gray-500" >
+       <a href='https://www.cihangir.k12.tr/'> ©2023. Cihangir Okulları - Tüm hakları saklıdır.</a>
       </footer>
     </main>
   );

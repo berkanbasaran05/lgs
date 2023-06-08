@@ -7,7 +7,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Component {...pageProps} />
-      <ToastContainer position="top-left" />
+      <ToastContainer position="top-center" />
     </>
   );
 }

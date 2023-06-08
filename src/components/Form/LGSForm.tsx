@@ -113,15 +113,15 @@ onSubmit: async (values, { resetForm }) => {
   
 try {
 await axios.post('https://cihangir.onrender.com/lgs-sonuc', values);
-toast.success('Sınav Cevaplarınız Başarıyla İletildi.Size Tarafımızdan Dönüş Sağlanacaktır.', {
-position: 'top-right'
+toast.success('Sınav Cevaplarınız Başarıyla İletildi.Yönlendiriliyorsunuz.', {
+position: 'top-center'
 });
 resetForm();
 setTimeout(() => {
   router.push('/tebrikler')
 }, 3000); 
 } catch (error) {
-toast.error('Mesaj gönderilirken bir hata oluştu.');
+toast.error('Mesaj gönderilirken bir hata oluştu.',{position:'top-center'});
 console.log(error);
 }
 },
@@ -374,7 +374,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
         onBlur={handleBlur}
         name="religionCorrectAnswer"
         type="number"
-        
+        pattern="[0-9]*"
         placeholder=""
         required
       />
@@ -598,34 +598,34 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
       
       
         
-      {!open && (
-           <button
-              type='button'
-              className="p-4  bg-brand-palette-primary text-white items-center justify-center text-center text-sm rounded-xl px-4 py-4  mt-12 mb-12 w-3/4 shadow-md  hover:text-white"
-              onClick={() => {
-                if (
-                  values.turkishCorrectAnswer  &&
-                  values.historyCorrectAnswer  &&
-                  values.religionCorrectAnswer &&
-                  values.foreignLanguageCorrectAnswer &&
-                  values.mathPointCorrectAnswer  &&
-                  values.sciencePointCorrectAnswer  &&
-                  values.turkishWrongAnswer  &&
-                  values.historyWrongAnswer &&
-                  values.religionWrongAnswer  &&
-                  values.foreignLanguageWrongAnswer &&
-                  values.mathPointWrongAnswer &&
-                  values.sciencePointWrongAnswer
-                ) {
-                  opendiv();
-                }
-              }}
-              
-              
-            >
-              Puanını Hesapla Ve Burs Fırsatlarını Gör
-            </button>
-          )}
+          {!open && (
+  <button
+    type='button'
+    className="p-4 bg-brand-palette-primary text-white items-center justify-center text-center text-sm rounded-xl px-4 py-4 mt-12 mb-12 w-3/4 shadow-md hover:text-white"
+    onClick={() => {
+      if (
+        !values.turkishCorrectAnswer ||
+        !values.historyCorrectAnswer ||
+        !values.religionCorrectAnswer ||
+        !values.foreignLanguageCorrectAnswer ||
+        !values.mathPointCorrectAnswer ||
+        !values.sciencePointCorrectAnswer ||
+        !values.turkishWrongAnswer ||
+        !values.historyWrongAnswer ||
+        !values.religionWrongAnswer ||
+        !values.foreignLanguageWrongAnswer ||
+        !values.mathPointWrongAnswer ||
+        !values.sciencePointWrongAnswer
+      ) {
+        toast.error('Lütfen Cevapları Giriniz',{position:'top-center'})
+      } else {
+        opendiv();
+      }
+    }}
+  >
+    Puanını Hesapla Ve Burs Fırsatlarını Gör
+  </button>
+)}
 
       {open && (
         
