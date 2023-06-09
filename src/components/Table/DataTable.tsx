@@ -126,14 +126,14 @@ const DataTable = <T extends object>({
     var csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     var csvURL = null;
     if ((navigator as any)?.msSaveBlob) {
-      csvURL = (navigator as any).msSaveBlob(csvData, `SosyalDugun.csv`);
+      csvURL = (navigator as any).msSaveBlob(csvData, `cihangirokullari.csv`);
     } else {
       csvURL = window.URL.createObjectURL(csvData);
     }
 
     var tempLink = document.createElement('a');
     tempLink.href = csvURL;
-    tempLink.setAttribute('download', `SosyalDugun.csv`);
+    tempLink.setAttribute('download', `cihangirokullari.csv`); 
     tempLink.click();
   }
 

@@ -6,28 +6,58 @@ import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
+import {CSVLink} from 'react-csv';
 
 export type ResultType = {
-    parentName: string;
+  _id:number;
+  studentName: string;
+  
+  turkishCorrectAnswer: number;
+  turkishWrongAnswer: number;
+  historyCorrectAnswer: number;
+  historyWrongAnswer: number;
+  religionCorrectAnswer: number;
+  religionWrongAnswer: number;
+  foreignLanguageCorrectAnswer: number;
+  foreignLanguageWrongAnswer: number;
+  mathPointCorrectAnswer: number;
+  mathPointWrongAnswer: number;
+  sciencePointCorrectAnswer: number;
+  sciencePointWrongAnswer: number;
+  parentName: string;
   parentPhone: string;
   parentEmail: string;
-  studentName: string;
   campus: string;
-  turkishCorrectAnswer: number;
-  historyCorrectAnswer: number;
-  religionCorrectAnswer: number;
-  foreignLanguageCorrectAnswer: number;
-  mathPointCorrectAnswer: number;
-  sciencePointCorrectAnswer: number;
-  turkishWrongAnswer: number;
-  historyWrongAnswer: number;
-  religionWrongAnswer: number;
-  foreignLanguageWrongAnswer: number;
-  mathPointWrongAnswer: number;
-  sciencePointWrongAnswer: number;
-  };
+   };
 
 const sonuclar = () => {
+    
+
+  const exportHeaders = [
+    { label: 'Öğrenci Adı', key: 'studentName' },
+    { label: 'Türkçe Doğru', key: 'turkishCorrectAnswer' },
+    { label: 'Türkçe Yanlış', key: 'turkishWrongAnswer' },
+    { label: 'İnkılap Doğru', key: 'historyCorrectAnswer' },
+    { label: 'İnkılap Yanlış', key: 'historyWrongAnswer' },
+    { label: 'Din Kültürü Doğru', key: 'religionCorrectAnswer' },
+    { label: 'Din Kültürü Yanlış', key: 'religionWrongAnswer' },
+    { label: 'Yabancı Dil Doğru', key: 'foreignLanguageCorrectAnswer' },
+    { label: 'Yabancı Dil Yanlış', key: 'foreignLanguageWrongAnswer' },
+    { label: 'Matematik Doğru', key: 'mathPointCorrectAnswer' },
+    { label: 'Matematik Yanlış', key: 'mathPointWrongAnswer' },
+    { label: 'Fen Bilimleri Doğru', key: 'sciencePointCorrectAnswer' },
+    { label: 'Fen Bilimleri Yanlış', key: 'sciencePointWrongAnswer' },
+    { label: 'Veli Cep', key: 'parentPhone' },
+    { label: 'Veli E-Mail', key: 'parentEmail' },
+    { label: 'Veli Adı', key: 'parentName' },
+    { label: 'Kampüs', key: 'campus' },
+  ];
+  
+
+
+
+
+
     const columns: DataTableProps<ResultType>['columns'] = [
         {
             key: 'öğrenci',
@@ -142,6 +172,7 @@ const sonuclar = () => {
     useEffect(() => {
       fetcher();
     }, []);
+   
   
   return (
     <main 
@@ -155,7 +186,18 @@ const sonuclar = () => {
         alt="logo"
       />
       </a>
-
+         
+        
+      {halls && (
+  <CSVLink
+    data={halls.map(({ _id, ...rest }) => rest)} // ID özelliğini kaldırarak sadece diğer özellikleri tutuyoruz
+    headers={exportHeaders}
+    filename="cihangirokullari.csv"
+    >
+    <span className='p-4 bg-brand-palette-primary text-white items-center justify-center text-center text-sm rounded-xl px-4 py-4 mt-12 mb-12 w-3/4 shadow-md hover:text-white'>Excel Olarak Çıktı Al</span>
+  </CSVLink>
+)}
+        
         <CustomSuspense
           isError={error}
           isLoading={loading}
@@ -165,7 +207,9 @@ const sonuclar = () => {
           {(rendered) => (
             <DataTable dataSet={10} columns={columns} rows={rendered} />
           )}
+          
         </CustomSuspense>
+   
         <footer className="mt-4 text-xs text-gray-500" >
        <a href='https://www.cihangir.k12.tr/'> ©2023. Cihangir Okulları - Tüm hakları saklıdır.</a>
       </footer>
