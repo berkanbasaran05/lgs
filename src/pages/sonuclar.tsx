@@ -6,12 +6,12 @@ import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
-import {CSVLink} from 'react-csv';
+import { CSVLink } from 'react-csv';
 
 export type ResultType = {
   _id: number;
   studentName: string;
-  createdAt: string; // Bu alanı ekledik
+  createdAt: string;
   turkishCorrectAnswer: number;
   turkishWrongAnswer: number;
   historyCorrectAnswer: number;
@@ -50,6 +50,7 @@ const sonuclar = () => {
     { label: 'Veli E-Mail', key: 'parentEmail' },
     { label: 'Veli Adı', key: 'parentName' },
     { label: 'Kampüs', key: 'campus' },
+    { label: 'Oluşturulma Tarihi', key: 'createdAt' }, // Yeni alan eklendi
   ];
 
   const columns: DataTableProps<ResultType>['columns'] = [
@@ -127,6 +128,11 @@ const sonuclar = () => {
       key: 'city',
       header: () => 'Kampüs',
       cell: (row) => <> {row.campus}</>
+    },
+    {
+      key: 'createdAt', // Yeni sütun eklendi
+      header: () => 'Oluşturulma Tarihi',
+      cell: (row) => <> {new Date(row.createdAt).toLocaleString()}</>
     },
   ];
 
