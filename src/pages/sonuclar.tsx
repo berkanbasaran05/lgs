@@ -160,7 +160,7 @@ const sonuclar = () => {
       setLoading(true);
       try {
         const { data } = await axios.get(`https://cihangir.onrender.com/lgs-sonuc`);
-        setHalls(data);
+        setHalls(data.sort((a:any, b:any) => a._id - b._id));
         setNotFilteredHalls(data);
       } catch (error) {
         setError(true);
@@ -211,7 +211,7 @@ const sonuclar = () => {
         </CustomSuspense>
    
         <footer className="mt-4 text-xs text-gray-500" >
-       <a href='https://www.cihangir.k12.tr/'> ©2023. Cihangir Okulları - Tüm hakları saklıdır.</a>
+       <a href='https://www.cihangir.k12.tr/'> ©2024. Cihangir Okulları - Tüm hakları saklıdır.</a>
       </footer>
     </main>
   )

@@ -794,7 +794,7 @@ const calculateNetCorrect = (correctAnswer: number, wrongAnswer: number): number
       )}
 
    <div className='flex flex-col mt-8 items-start text-sm space-y-1'>
-   <span>• 2022 MEB LGS sınav istatistikleri (net ortalamaları ve standart sapma değerleri) kullanılarak puan hesaplaması yapılmaktadır. Dolayısıyla tüm puan hesaplama uygulamaları tahmini olacaktır.</span>
+   <span>• 2023 MEB LGS sınav istatistikleri (net ortalamaları ve standart sapma değerleri) kullanılarak puan hesaplaması yapılmaktadır. Dolayısıyla tüm puan hesaplama uygulamaları tahmini olacaktır.</span>
 <span>• Sistemi kullanarak alacağınız puan tahmini puandır, kanuni bağlayıcılığı yoktur.</span>
 <span>• Sınavın kolay olması durumunda puanlar düşer, zor olması durumunda puanlar yükselir.</span>
 <span>• Yerleştirme sisteminde önemli olan aldığınız puan değil, tüm sınava girenler içindeki sıralamanızdır.</span>

@@ -42,7 +42,7 @@ export default function Home() {
       </div>
 
       <footer className="mt-4 text-xs text-gray-500" >
-       <a href='https://www.cihangir.k12.tr/'> ©2023. Cihangir Okulları - Tüm hakları saklıdır.</a>
+       <a href='https://www.cihangir.k12.tr/'> ©2024. Cihangir Okulları - Tüm hakları saklıdır.</a>
       </footer>
     </main>
   );
