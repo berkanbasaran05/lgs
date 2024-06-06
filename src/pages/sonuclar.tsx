@@ -2,6 +2,7 @@ import Badge from '@/components/Badge';
 import CustomSuspense from '@/components/CustomSuspense'
 import { TableFallback } from '@/components/Loading';
 import DataTable, { DataTableProps } from '@/components/Table/DataTable';
+import axiosInstance from '@/utils/axiosInstance';
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -147,7 +148,7 @@ const sonuclar = () => {
     setError(false);
     setLoading(true);
     try {
-      const { data } = await axios.get(`https://cihangir.onrender.com/lgs-sonuc`);
+      const { data } = await axiosInstance.get(`/contact/lgs`);
       setHalls(data.sort((a: ResultType, b: ResultType) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
       setNotFilteredHalls(data);
     } catch (error) {
