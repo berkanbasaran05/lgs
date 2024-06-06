@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    NEXT_APP_API_URL: "http://localhost:8080",
+    NEXT_APP_API_URL: "https://api.cihangir.k12.tr",
   },
 }
 
